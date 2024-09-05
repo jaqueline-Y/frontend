@@ -1,75 +1,59 @@
 // Fig. 12.25: MultipleSelectionFrame.java
 // JList that allows multiple selections.
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
+import java.awt.FlowLayout;                // Importa o layout FlowLayout para organizar os componentes.
+import java.awt.event.ActionListener;      // Importa a interface para tratar eventos de ação, como cliques de botão.
+import java.awt.event.ActionEvent;         // Importa a classe ActionEvent, que representa um evento de ação.
+import javax.swing.JFrame;                 // Importa a classe JFrame para criar a janela principal da aplicação.
+import javax.swing.JList;                  // Importa a classe JList para criar listas de itens.
+import javax.swing.JButton;                // Importa a classe JButton para criar botões.
+import javax.swing.JScrollPane;            // Importa a classe JScrollPane para adicionar barras de rolagem à lista.
+import javax.swing.ListSelectionModel;     // Importa a classe para definir o modo de seleção da lista.
 
 public class MultipleSelectionFrame extends JFrame 
 {
-   private final JList<String> colorJList; // list to hold color names
-   private final JList<String> copyJList; // list to hold copied names
-   private JButton copyJButton; // button to copy selected names
-   private static final String[] colorNames = {"Black", "Blue", "Cyan",
+   private final JList<String> colorJList; // Declara um JList para exibir nomes de cores.
+   private final JList<String> copyJList;  // Declara outro JList para exibir as cores copiadas.
+   private JButton copyJButton;            // Declara um JButton para permitir a cópia das seleções.
+   private static final String[] colorNames = {"Black", "Blue", "Cyan", // Array com os nomes das cores.
       "Dark Gray", "Gray", "Green", "Light Gray", "Magenta", "Orange", 
       "Pink", "Red", "White", "Yellow"};
 
-   // MultipleSelectionFrame constructor
+   // Construtor da classe MultipleSelectionFrame
    public MultipleSelectionFrame()
    {
-      super("Multiple Selection Lists");
-      setLayout(new FlowLayout());
+      super("Multiple Selection Lists");    // Define o título da janela.
+      setLayout(new FlowLayout());          // Define o layout da janela como FlowLayout.
 
-      colorJList = new JList<String>(colorNames); // list of color names
-      colorJList.setVisibleRowCount(5); // show five rows
-      colorJList.setSelectionMode(
+      colorJList = new JList<String>(colorNames); // Inicializa o JList com o array de nomes de cores.
+      colorJList.setVisibleRowCount(5);           // Define o número de linhas visíveis na lista como 5.
+      colorJList.setSelectionMode(               // Define o modo de seleção para múltiplos intervalos.
          ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-      add(new JScrollPane(colorJList)); // add list with scrollpane
+      add(new JScrollPane(colorJList));           // Adiciona o JList ao JFrame dentro de um JScrollPane (barra de rolagem).
 
-      copyJButton = new JButton("Copy >>>"); 
-      copyJButton.addActionListener(
-         new ActionListener() // anonymous inner class 
+      copyJButton = new JButton("Copy >>>");      // Cria um botão com o texto "Copy >>>".
+      copyJButton.addActionListener(              // Adiciona um ActionListener ao botão.
+         new ActionListener() // Classe interna anônima para tratar eventos de clique do botão.
          {  
-            // handle button event
+            // Método chamado quando o botão é clicado.
             @Override
             public void actionPerformed(ActionEvent event)
             {
-               // place selected values in copyJList
-               copyJList.setListData(
-                  colorJList.getSelectedValuesList().toArray(
+               // Copia os itens selecionados de colorJList para copyJList.
+               copyJList.setListData(                    // Define os dados de copyJList.
+                  colorJList.getSelectedValuesList().toArray( // Converte os itens selecionados em um array de Strings.
                      new String[0]));
             }
          } 
       ); 
 
-      add(copyJButton); // add copy button to JFrame
+      add(copyJButton); // Adiciona o botão de cópia ao JFrame.
 
-      copyJList = new JList<String>(); // list to hold copied color names
-      copyJList.setVisibleRowCount(5); // show 5 rows
-      copyJList.setFixedCellWidth(100); // set width
-      copyJList.setFixedCellHeight(15); // set height
-      copyJList.setSelectionMode(
+      copyJList = new JList<String>();            // Inicializa o JList para exibir os itens copiados.
+      copyJList.setVisibleRowCount(5);            // Define o número de linhas visíveis na lista como 5.
+      copyJList.setFixedCellWidth(100);           // Define a largura fixa das células como 100 pixels.
+      copyJList.setFixedCellHeight(15);           // Define a altura fixa das células como 15 pixels.
+      copyJList.setSelectionMode(                 // Define o modo de seleção para um único intervalo.
          ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-      add(new JScrollPane(copyJList)); // add list with scrollpane
+      add(new JScrollPane(copyJList));            // Adiciona o JList ao JFrame dentro de um JScrollPane.
    } 
-} // end class MultipleSelectionFrame
-
-
-/**************************************************************************
- * (C) Copyright 1992-2014 by Deitel & Associates, Inc. and               *
- * Pearson Education, Inc. All Rights Reserved.                           *
- *                                                                        *
- * DISCLAIMER: The authors and publisher of this book have used their     *
- * best efforts in preparing the book. These efforts include the          *
- * development, research, and testing of the theories and programs        *
- * to determine their effectiveness. The authors and publisher make       *
- * no warranty of any kind, expressed or implied, with regard to these    *
- * programs or to the documentation contained in these books. The authors *
- * and publisher shall not be liable in any event for incidental or       *
- * consequential damages in connection with, or arising out of, the       *
- * furnishing, performance, or use of these programs.                     *
- *************************************************************************/
+} // fim da classe MultipleSelectionFrame
