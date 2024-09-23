@@ -1,161 +1,172 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import javax.swing.JFrame;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.ButtonGroup;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JMenuBar;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class MenuFrame extends JFrame 
 {
+   // Array de cores para o menu
    private final Color[] colorValues = 
-      {Color.BLACK, Color.BLUE, Color.RED, Color.GREEN};   
-   private final JRadioButtonMenuItem[] colorItems; 
-   private final JRadioButtonMenuItem[] fonts; 
-   private final JCheckBoxMenuItem[] styleItems; 
-   private final JLabel displayJLabel; 
-   private final ButtonGroup fontButtonGroup; 
-   private final ButtonGroup colorButtonGroup; 
-   private int style; 
+      {Color.BLACK, Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW};   
+   private final JRadioButtonMenuItem[] colorItems; // Itens do menu de cores
+   private final JRadioButtonMenuItem[] fonts; // Itens do menu de fontes
+   private final JRadioButtonMenuItem[] tamanhos; // Itens do menu de tamanhos
+   private final JCheckBoxMenuItem[] styleItems; // Itens do menu de estilo
+   private final JLabel displayJLabel; // Label para exibir texto formatado
+   private final ButtonGroup fontButtonGroup; // Grupo de botões para seleção de fonte
+   private final ButtonGroup colorButtonGroup; // Grupo de botões para seleção de cor
+   private final ButtonGroup tamanhoButtonGroup; // Grupo de botões para seleção de tamanho
+   private int style; // Estilo da fonte (negrito, itálico, etc.)
+   private int tamanhoAtual = 72; // Tamanho atual da fonte
 
-   
    public MenuFrame()
    {
-      super("Using JMenus");     
+      super("Using JMenus"); // Título da janela
 
-      JMenu fileMenu = new JMenu("File"); // create file menu
-      fileMenu.setMnemonic('F'); // set mnemonic to F
+      // Criando o menu "File"
+      JMenu fileMenu = new JMenu("File");
+      fileMenu.setMnemonic('F'); // Atalho de teclado
 
-      // create About... menu item
+      // Item "About"
       JMenuItem aboutItem = new JMenuItem("About...");
-      aboutItem.setMnemonic('A'); // set mnemonic to A
-      fileMenu.add(aboutItem); // add about item to file menu
+      aboutItem.setMnemonic('A');
+      fileMenu.add(aboutItem);
       aboutItem.addActionListener(
-         new ActionListener() // anonymous inner class
+         new ActionListener()
          {  
-            // display message dialog when user selects About...
             @Override
             public void actionPerformed(ActionEvent event)
             {
+               // Mostra uma mensagem sobre o aplicativo
                JOptionPane.showMessageDialog(MenuFrame.this,
-                  "This is an example\nof using menus",
+                  "This is an example\\n\nof using menus",
                   "About", JOptionPane.PLAIN_MESSAGE);
             } 
          } 
       ); 
- 
-      JMenuItem exitItem = new JMenuItem("Exit"); // create exit item
-      exitItem.setMnemonic('x'); // set mnemonic to x
-      fileMenu.add(exitItem); // add exit item to file menu
+
+      // Item "Exit"
+      JMenuItem exitItem = new JMenuItem("Exit");
+      exitItem.setMnemonic('x');
+      fileMenu.add(exitItem);
       exitItem.addActionListener(
-         new ActionListener() // anonymous inner class
+         new ActionListener()
          {  
-            // terminate application when user clicks exitItem
             @Override
             public void actionPerformed(ActionEvent event)
             {
-               System.exit(0); // exit application
+               // Fecha o aplicativo
+               System.exit(0);
             } 
          }
       ); 
 
-      JMenuBar bar = new JMenuBar(); // create menu bar
-      setJMenuBar(bar); // add menu bar to application
-      bar.add(fileMenu); // add file menu to menu bar
+      // Adicionando o menu "File" à barra de menu
+      JMenuBar bar = new JMenuBar();
+      setJMenuBar(bar);
+      bar.add(fileMenu);
 
-      JMenu formatMenu = new JMenu("Format"); // create format menu
-      formatMenu.setMnemonic('r'); // set mnemonic to r
+      // Criando o menu "Format"
+      JMenu formatMenu = new JMenu("Format");
+      formatMenu.setMnemonic('r');
 
-      // array listing string colors
-      String[] colors = {"Black", "Blue", "Red", "Green"};
+      // Criando o submenu "Color"
+      String[] colors = {"Black", "Blue", "Red", "Green", "Yellow"};
+      JMenu colorMenu = new JMenu("Color");
+      colorMenu.setMnemonic('C');
 
-      JMenu colorMenu = new JMenu("Color"); // create color menu
-      colorMenu.setMnemonic('C'); // set mnemonic to C
-
-      // create radio button menu items for colors
+      // Inicializando itens de cores
       colorItems = new JRadioButtonMenuItem[colors.length];
-      colorButtonGroup = new ButtonGroup(); // manages colors
-      ItemHandler itemHandler = new ItemHandler(); // handler for colors
+      colorButtonGroup = new ButtonGroup();
+      ItemHandler itemHandler = new ItemHandler(); // Manipulador de eventos
 
-      // create color radio button menu items
+      // Criando e adicionando itens de cores ao menu
       for (int count = 0; count < colors.length; count++) 
       {
-         colorItems[count] = 
-            new JRadioButtonMenuItem(colors[count]); // create item
-         colorMenu.add(colorItems[count]); // add item to color menu
-         colorButtonGroup.add(colorItems[count]); // add to group
+         colorItems[count] = new JRadioButtonMenuItem(colors[count]);
+         colorMenu.add(colorItems[count]);
+         colorButtonGroup.add(colorItems[count]);
          colorItems[count].addActionListener(itemHandler);
       }
 
-      colorItems[0].setSelected(true); // select first Color item
+      colorItems[0].setSelected(true); // Seleciona a cor preta por padrão
 
-      formatMenu.add(colorMenu); // add color menu to format menu
-      formatMenu.addSeparator(); // add separator in menu
+      formatMenu.add(colorMenu); // Adiciona o menu de cores ao menu de formato
+      formatMenu.addSeparator(); // Adiciona um separador
 
-      // array listing font names
-      String[] fontNames = {"Serif", "Monospaced", "SansSerif"};
-      JMenu fontMenu = new JMenu("Font"); // create font menu
-      fontMenu.setMnemonic('n'); // set mnemonic to n
+      // Criando o submenu "Font"
+      String[] fontNames = {"Serif", "Monospaced", "SansSerif", "Arial"};
+      JMenu fontMenu = new JMenu("Font");
+      fontMenu.setMnemonic('n');
 
-      // create radio button menu items for font names
+      // Inicializando itens de fonte
       fonts = new JRadioButtonMenuItem[fontNames.length];
-      fontButtonGroup = new ButtonGroup(); // manages font names
+      fontButtonGroup = new ButtonGroup();
 
-      // create Font radio button menu items
+      // Criando e adicionando itens de fontes ao menu
       for (int count = 0; count < fonts.length; count++) 
       {
          fonts[count] = new JRadioButtonMenuItem(fontNames[count]);
-         fontMenu.add(fonts[count]); // add font to font menu
-         fontButtonGroup.add(fonts[count]); // add to button group
-         fonts[count].addActionListener(itemHandler); // add handler
+         fontMenu.add(fonts[count]);
+         fontButtonGroup.add(fonts[count]);
+         fonts[count].addActionListener(itemHandler);
       } 
 
-      fonts[0].setSelected(true); // select first Font menu item
-      fontMenu.addSeparator(); // add separator bar to font menu
+      fonts[0].setSelected(true); // Seleciona a fonte "Serif" por padrão
+      fontMenu.addSeparator(); // Adiciona um separador
 
-      String[] styleNames = {"Bold", "Italic"}; // names of styles
+      // Criando itens de estilo (negrito, itálico, sublinhado)
+      String[] styleNames = {"Bold", "Italic", "Underline"};
       styleItems = new JCheckBoxMenuItem[styleNames.length];
-      StyleHandler styleHandler = new StyleHandler(); // style handler
+      StyleHandler styleHandler = new StyleHandler();
 
-      // create style checkbox menu items
       for (int count = 0; count < styleNames.length; count++) 
       {
-         styleItems[count] = 
-            new JCheckBoxMenuItem(styleNames[count]); // for style
-         fontMenu.add(styleItems[count]); // add to font menu
-         styleItems[count].addItemListener(styleHandler); // handler
+         styleItems[count] = new JCheckBoxMenuItem(styleNames[count]);
+         fontMenu.add(styleItems[count]);
+         styleItems[count].addItemListener(styleHandler);
       }
 
-      formatMenu.add(fontMenu); // add Font menu to Format menu
-      bar.add(formatMenu); // add Format menu to menu bar
-     
-      // set up label to display text
+      formatMenu.add(fontMenu); // Adiciona o menu de fontes ao menu de formato
+
+      formatMenu.addSeparator(); // Adiciona um separador
+
+      // Criando o submenu "Tamanho"
+      int[] tamanhoint = {72, 52, 22}; 
+      JMenu tamanhoMenu = new JMenu("Tamanho"); 
+      tamanhoMenu.setMnemonic('T'); 
+
+      tamanhos = new JRadioButtonMenuItem[tamanhoint.length]; 
+      tamanhoButtonGroup = new ButtonGroup(); 
+
+      // Criando e adicionando itens de tamanho ao menu
+      for (int count = 0; count < tamanhos.length; count++) 
+      {
+         tamanhos[count] = new JRadioButtonMenuItem(String.valueOf(tamanhoint[count])); 
+         tamanhoMenu.add(tamanhos[count]); 
+         tamanhoButtonGroup.add(tamanhos[count]); 
+         tamanhos[count].addActionListener(itemHandler); 
+      }
+
+      tamanhos[0].setSelected(true); // Seleciona o tamanho 72 por padrão
+      formatMenu.add(tamanhoMenu); // Adiciona o menu de tamanhos ao menu de formato
+
+      // Configurando a label para exibir o texto
       displayJLabel = new JLabel("Sample Text", SwingConstants.CENTER);
-      displayJLabel.setForeground(colorValues[0]);
-      displayJLabel.setFont(new Font("Serif", Font.PLAIN, 72));
+      displayJLabel.setForeground(colorValues[0]); // Define a cor inicial
+      displayJLabel.setFont(new Font("Serif", Font.PLAIN, tamanhoAtual)); // Define a fonte inicial
 
-      getContentPane().setBackground(Color.CYAN); // set background
-      add(displayJLabel, BorderLayout.CENTER); // add displayJLabel
-   } // end MenuFrame constructor
+      // Configurando o fundo da janela
+      getContentPane().setBackground(Color.CYAN);
+      add(displayJLabel, BorderLayout.CENTER); // Adiciona a label ao centro da janela
+   }
 
-   // inner class to handle action events from menu items
+   // Classe interna para manipular eventos de itens de menu
    private class ItemHandler implements ActionListener 
    {
-      // process color and font selections
       @Override
       public void actionPerformed(ActionEvent event)
       {
-         // process color selection
+         // Atualiza a cor do texto com base na seleção
          for (int count = 0; count < colorItems.length; count++)
          {
             if (colorItems[count].isSelected()) 
@@ -165,60 +176,65 @@ public class MenuFrame extends JFrame
             } 
          } 
 
-         // process font selection
+         // Atualiza a fonte com base na seleção
          for (int count = 0; count < fonts.length; count++)
          {
             if (event.getSource() == fonts[count]) 
             {
                displayJLabel.setFont(
-                  new Font(fonts[count].getText(), style, 72));
+                  new Font(fonts[count].getText(), style, tamanhoAtual));
             }
          }
 
-         repaint(); // redraw application
+         // Atualiza estilo e tamanho do texto
+         negritoItalico();
+         sublinharTexto();
+         tamanhoTexto();
+         repaint(); // Redesenha a interface
       } 
-   } // end class ItemHandler
+   }
 
-   // inner class to handle item events from checkbox menu items
+   // Classe interna para manipular eventos de estilo
    private class StyleHandler implements ItemListener 
    {
-      // process font style selections
       @Override
       public void itemStateChanged(ItemEvent e)
       {
-         String name = displayJLabel.getFont().getName(); // current Font
-         Font font; // new font based on user selections
+         // Atualiza estilo e tamanho do texto
+         negritoItalico();
+         sublinharTexto();
+         tamanhoTexto();
+         repaint(); // Redesenha a interface
+      }
+   }
 
-         // determine which CheckBoxes are checked and create Font
-         if (styleItems[0].isSelected() && 
-              styleItems[1].isSelected())
-            font = new Font(name, Font.BOLD + Font.ITALIC, 72);
-         else if (styleItems[0].isSelected())
-            font = new Font(name, Font.BOLD, 72);
-         else if (styleItems[1].isSelected())
-            font = new Font(name, Font.ITALIC, 72);
-         else
-            font = new Font(name, Font.PLAIN, 72);
+   // Atualiza o estilo da fonte (negrito/itálico)
+   public void negritoItalico() {
+      String name = displayJLabel.getFont().getName();
+      Font font;
 
-         displayJLabel.setFont(font);
-         repaint(); // redraw application
-      } 
-   } // end class StyleHandler
-} // end class MenuFrame
+      if (styleItems[0].isSelected() && 
+           styleItems[1].isSelected())
+         font = new Font(name, Font.BOLD + Font.ITALIC, tamanhoAtual);
+      else if (styleItems[0].isSelected())
+         font = new Font(name, Font.BOLD, tamanhoAtual);
+      else if (styleItems[1].isSelected())
+         font = new Font(name, Font.ITALIC, tamanhoAtual);
+      else
+         font = new Font(name, Font.PLAIN, tamanhoAtual);
 
+      displayJLabel.setFont(font); // Aplica a nova fonte
+   }
 
-/**************************************************************************
- * (C) Copyright 1992-2014 by Deitel & Associates, Inc. and               *
- * Pearson Education, Inc. All Rights Reserved.                           *
- *                                                                        *
- * DISCLAIMER: The authors and publisher of this book have used their     *
- * best efforts in preparing the book. These efforts include the          *
- * development, research, and testing of the theories and programs        *
- * to determine their effectiveness. The authors and publisher make       *
- * no warranty of any kind, expressed or implied, with regard to these    *
- * programs or to the documentation contained in these books. The authors *
- * and publisher shall not be liable in any event for incidental or       *
- * consequential damages in connection with, or arising out of, the       *
- * furnishing, performance, or use of these programs.                     *
- *************************************************************************/
+   // Atualiza o texto para sublinhado
+   public void sublinharTexto() {
+      if (styleItems[2].isSelected()) {
+         displayJLabel.setText("<html><u>" + displayJLabel.getText() + "</u></html>"); // Aplica sublinhado
+      }
+   }
 
+   // Atualiza o tamanho da fonte com base na seleção
+   public void tamanhoTexto() {
+      for (int count = 0; count < tamanhos.length; count++) 
+      {
+         if (
